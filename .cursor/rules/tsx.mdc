@@ -1,3 +1,8 @@
+---
+description: React TSX Structure Standards
+globs: src/app/**/*.tsx, src/components/**/*.tsx
+alwaysApply: false
+---
 # React TSX Structure Standards
 
 Standards for writing professionally structured React TSX files.
@@ -23,17 +28,18 @@ actions:
            c. Component function
            d. Helper functions/hooks (if needed)
            e. Exports
+         - NEVER use semicolons to terminate.
 
          ```tsx
          // Component file structure example
-         import React, { useState, useEffect } from 'react';
+         import * as React from "react"
          
-         import { fetchData } from '@/lib/api';
-         import { Card } from '@/components/ui/Card';
+         import { fetchData } from "@/lib/api"
+         import { Card } from "@/components/ui/Card"
          
          interface UserCardProps {
-           userId: string;
-           isEditable?: boolean;
+           userId: string
+           isEditable?: boolean
          }
          
          export function UserCard({ userId, isEditable = false }: UserCardProps) {
@@ -55,19 +61,19 @@ actions:
          ```tsx
          interface ButtonProps {
            /** The text content to display in the button */
-           label: string;
+           label: string
            /** Optional click handler */
-           onClick?: () => void;
+           onClick?: () => void
            /** Visual variant of the button */
-           variant?: 'primary' | 'secondary' | 'outline';
+           variant?: "primary" | "secondary" | "outline"
            /** Whether the button is in a disabled state */
-           disabled?: boolean;
+           disabled?: boolean
          }
          
          export function Button({
            label,
            onClick,
-           variant = 'primary',
+           variant = "primary",
            disabled = false
          }: ButtonProps) {
            // Component implementation
@@ -90,7 +96,7 @@ actions:
              filteredUsers, 
              search, 
              handleSearchChange 
-           } = useUserSearch(users);
+           } = useUserSearch(users)
            
            // Component implementation
          }
@@ -105,21 +111,23 @@ actions:
          ```tsx
          function ProductDisplay({ productId }: ProductDisplayProps): React.ReactNode {
            // State hooks
-           const [quantity, setQuantity] = useState(1);
+           const [quantity, setQuantity] = React.useState(1)
            
            // Data/effect hooks
-           const { product, isLoading } = useProduct(productId);
+           const { product, isLoading } = useProduct(productId)
            
            // Derived values
-           const totalPrice = product ? product.price * quantity : 0;
+           const totalPrice = product ? product.price * quantity : 0
            
            // Handlers
            const handleQuantityChange = (newQuantity: number) => {
-             setQuantity(Math.max(1, newQuantity));
+             setQuantity(Math.max(1, newQuantity))
            };
            
            // Render logic
-           if (isLoading) return <Spinner />;
+           if (isLoading) {
+            return <Spinner />
+           }
            
            return (
              // JSX
@@ -129,7 +137,7 @@ actions:
 
       5. JSX Formatting:
          - Indent JSX elements consistently
-         - Use fragment shorthand (<>) when possible
+         - Use fragment longhand (<React.Fragment></React.Fragment>) when possible
          - Break down complex components into smaller parts
          - Use conditional rendering patterns appropriately
          - Format attributes consistently (one per line when many)
@@ -168,29 +176,29 @@ examples:
   - input: |
       // Bad: Unstructured component
       const UserCard = props => {
-        let [isExpanded, setIsExpanded] = React.useState(false);
+        let [isExpanded, setIsExpanded] = useState(false)
         return <div>
-          <h2>{props.name}</h2>
-          <button onClick={() => setIsExpanded(!isExpanded)}>
-            {isExpanded ? 'Show Less' : 'Show More'}
-          </button>
-          {isExpanded && <p>{props.bio}</p>}
-        </div>;
+            <h2>{props.name}</h2>
+            <button onClick={() => setIsExpanded(!isExpanded)}>
+              {isExpanded ? "Show Less" : "Show More"}
+            </button>
+            {isExpanded && <p>{props.bio}</p>}
+          </div>;
       }
       export default UserCard;
 
       // Good: Well-structured component
-      import React, { useState } from 'react';
+      import * as React from "react"
       
       interface UserCardProps {
-        name: string;
-        bio?: string;
+        name: string
+        bio?: string
       }
       
-      export function UserCard({ name, bio = '' }: UserCardProps): React.ReactNode {
-        const [isExpanded, setIsExpanded] = useState(false);
+      export function UserCard({ name, bio = "" }: UserCardProps): React.ReactNode {
+        const [isExpanded, setIsExpanded] = React.useState(false)
         
-        const toggleExpanded = () => setIsExpanded(prev => !prev);
+        const toggleExpanded = () => setIsExpanded(prev => !prev)
         
         return (
           <div className="user-card">
@@ -199,7 +207,7 @@ examples:
               onClick={toggleExpanded}
               aria-expanded={isExpanded}
             >
-              {isExpanded ? 'Show Less' : 'Show More'}
+              {isExpanded ? "Show Less" : "Show More"}
             </button>
             
             {isExpanded && bio && <p>{bio}</p>}
@@ -211,19 +219,19 @@ examples:
   - input: |
       // Bad: Props handling
       function Button(props) {
-        return <button className={props.primary ? 'primary' : 'secondary'} disabled={props.disabled}>{props.children}</button>
+        return <button className={props.primary ? "primary" : "secondary"} disabled={props.disabled}>{props.children}</button>
       }
       
       // Good: Proper props typing and handling
       interface ButtonProps {
         /** Whether to show in primary style */
-        primary?: boolean;
+        primary?: boolean
         /** Whether the button is disabled */
-        disabled?: boolean;
+        disabled?: boolean
         /** Button content */
         children: React.ReactNode;
         /** Click handler */
-        onClick?: () => void;
+        onClick?: () => void
       }
       
       export function Button({
@@ -234,7 +242,7 @@ examples:
       }: ButtonProps): React.ReactNode {
         return (
           <button
-            className={primary ? 'primary' : 'secondary'}
+            className={primary ? "primary" : "secondary"}
             disabled={disabled}
             onClick={onClick}
           >
