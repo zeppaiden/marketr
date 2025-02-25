@@ -1,22 +1,35 @@
+"use client";
+
+import { useState } from "react";
 import { CalendarView } from "@/components/calendar/CalendarView";
 import { ContentRecommendations } from "@/components/calendar/ContentRecommendations";
 import { RefreshSuggestions } from "@/components/calendar/RefreshSuggestions";
+import { ExportDialog } from "@/components/calendar/ExportDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function CalendarPage() {
+  const [timeRange, setTimeRange] = useState("3months");
+  const [showExportDialog, setShowExportDialog] = useState(false);
+  
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">content strategy calendar</h1>
         <div className="flex items-center gap-2">
-          <select className="rounded-md border border-gray-200 px-3 py-1 text-sm">
-            <option>next 3 months</option>
-            <option>next 6 months</option>
-            <option>custom range</option>
+          <select 
+            className="rounded-md border border-gray-200 px-3 py-1 text-sm"
+            value={timeRange}
+            onChange={(e) => setTimeRange(e.target.value)}
+          >
+            <option value="3months">next 3 months</option>
+            <option value="6months">next 6 months</option>
+            <option value="12months">next 12 months</option>
+            <option value="custom">custom range</option>
           </select>
           <button 
             type="button"
             className="rounded-md bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
+            onClick={() => setShowExportDialog(true)}
           >
             export calendar
           </button>
@@ -75,6 +88,11 @@ export default function CalendarPage() {
           </div>
         </div>
       </div>
+      
+      <ExportDialog 
+        isOpen={showExportDialog} 
+        onClose={() => setShowExportDialog(false)} 
+      />
     </div>
   );
 } 
