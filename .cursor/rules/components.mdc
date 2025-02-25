@@ -1,0 +1,246 @@
+---
+description: React Server Components Standards
+globs: src/app/**/*.tsx, src/components/**/*.tsx
+alwaysApply: false
+---
+# React Server Components Standards
+
+Standards for writing professionally structured React Server Components.
+
+<rule>
+name: server_components
+description: Standards for creating well-structured, maintainable React Server Components
+filters:
+  - type: file_extension
+    pattern: "\\.tsx$"
+  - type: event
+    pattern: "file_create|file_update"
+
+actions:
+  - type: suggest
+    message: |
+      When working with React Server Components:
+
+      1. Component Declaration:
+         - Server Components are the default in Next.js App Router
+         - Do NOT add "use client" directive for server components
+         - Use async/await directly in server components for data fetching
+         - NEVER use hooks or browser APIs in server components
+
+         ```tsx
+         // Server Component example
+         import { db } from "@/lib/db"
+         
+         interface UserProfileProps {
+           userId: string
+         }
+         
+         export async function UserProfile({ userId }: UserProfileProps) {
+           // Fetch data directly - this runs on the server
+           const user = await db.users.findUnique({
+             where: { id: userId }
+           })
+           
+           if (!user) {
+             return <div>User not found</div>
+           }
+           
+           return (
+             <div className="user-profile">
+               <h1>{user.name}</h1>
+               <p>{user.email}</p>
+             </div>
+           )
+         }
+         ```
+
+      2. Client Components:
+         - Add "use client" directive at the top of the file for client components
+         - Keep client components as small as possible
+         - Place "use client" as the first line before any imports
+
+         ```tsx
+         "use client"
+         
+         import { useState } from "react"
+         
+         interface CounterProps {
+           initialCount?: number
+         }
+         
+         export function Counter({ initialCount = 0 }: CounterProps) {
+           const [count, setCount] = useState(initialCount)
+           
+           return (
+             <div>
+               <p>Count: {count}</p>
+               <button onClick={() => setCount(count + 1)}>Increment</button>
+             </div>
+           )
+         }
+         ```
+
+      3. Data Fetching:
+         - Fetch data directly in server components without useEffect or SWR/React Query
+         - Use fetch with appropriate caching options
+         - Handle loading and error states explicitly
+
+         ```tsx
+         // Good: Server component data fetching
+         export async function ProductList() {
+           const products = await fetch('https://api.example.com/products', {
+             next: { revalidate: 3600 } // Revalidate every hour
+           }).then(res => res.json())
+           
+           return (
+             <div className="products-grid">
+               {products.map(product => (
+                 <ProductCard key={product.id} product={product} />
+               ))}
+             </div>
+           )
+         }
+         ```
+
+      4. Component Composition:
+         - Server components can render client components, but not vice versa
+         - Pass data from server to client components via props
+         - Use React.cache() for expensive operations that should be cached
+
+         ```tsx
+         // Server component rendering client components
+         import { UserProfile } from "@/components/UserProfile" // Server component
+         import { EditButton } from "@/components/EditButton" // Client component
+         
+         export async function UserPage({ params }: { params: { id: string } }) {
+           const user = await fetchUser(params.id)
+           
+           return (
+             <div className="user-page">
+               <UserProfile user={user} />
+               <EditButton userId={user.id} /> {/* Client component */}
+             </div>
+           )
+         }
+         ```
+
+      5. File Organization:
+         - Group server and client components logically
+         - Consider using separate directories for client-only components
+         - Use naming conventions to distinguish server/client components (optional)
+
+         ```
+         components/
+         ├── server/
+         │   ├── UserProfile.tsx
+         │   └── ProductList.tsx
+         ├── client/
+         │   ├── EditButton.tsx  // has "use client" directive
+         │   └── AddToCart.tsx   // has "use client" directive
+         └── shared/             // components that can be used in both contexts
+             └── Card.tsx        // has "use client" directive if needed
+         ```
+
+      6. Error Handling:
+         - Implement error.tsx files for error boundaries
+         - Use try/catch for async operations in server components
+         - Consider implementing loading.tsx for suspense boundaries
+
+         ```tsx
+         // error.tsx example
+         "use client"
+         
+         import { useEffect } from "react"
+         
+         export default function Error({
+           error,
+           reset,
+         }: {
+           error: Error & { digest?: string }
+           reset: () => void
+         }) {
+           useEffect(() => {
+             // Log the error to an error reporting service
+             console.error(error)
+           }, [error])
+           
+           return (
+             <div className="error-container">
+               <h2>Something went wrong!</h2>
+               <button onClick={() => reset()}>Try again</button>
+             </div>
+           )
+         }
+         ```
+
+examples:
+  - input: |
+      // Bad: Using hooks in a server component
+      import { useState } from "react"
+      
+      export function UserProfile({ userId }) {
+        const [isLoading, setIsLoading] = useState(true)
+        
+        // This won't work in a server component
+        useEffect(() => {
+          fetch(`/api/users/${userId}`)
+            .then(res => res.json())
+            .then(data => {
+              setUser(data)
+              setIsLoading(false)
+            })
+        }, [userId])
+        
+        if (isLoading) return <div>Loading...</div>
+        
+        return <div>{user.name}</div>
+      }
+
+      // Good: Proper server component
+      export async function UserProfile({ userId }: { userId: string }) {
+        const user = await fetch(`/api/users/${userId}`).then(res => res.json())
+        
+        if (!user) {
+          return <div>User not found</div>
+        }
+        
+        return <div>{user.name}</div>
+      }
+    output: "Correctly implemented server component"
+
+  - input: |
+      // Bad: Missing "use client" directive for interactive component
+      import { useState } from "react"
+      
+      export function Counter() {
+        const [count, setCount] = useState(0)
+        
+        return (
+          <div>
+            <p>Count: {count}</p>
+            <button onClick={() => setCount(count + 1)}>Increment</button>
+          </div>
+        )
+      }
+      
+      // Good: Properly marked client component
+      "use client"
+      
+      import { useState } from "react"
+      
+      export function Counter() {
+        const [count, setCount] = useState(0)
+        
+        return (
+          <div>
+            <p>Count: {count}</p>
+            <button onClick={() => setCount(count + 1)}>Increment</button>
+          </div>
+        )
+      }
+    output: "Correctly marked client component"
+
+metadata:
+  priority: high
+  version: 1.0
+</rule> 
