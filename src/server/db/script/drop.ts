@@ -9,10 +9,7 @@ import * as schema from "@/server/db/schema"
 
 async function dropTables() {
   const tables = [
-    schema.verification,
-    schema.session,
-    schema.account,
-    schema.user
+    schema.test
   ]
 
   for (const table of tables) {
@@ -20,7 +17,7 @@ async function dropTables() {
     const exists = await db.execute(
       sql`SELECT EXISTS (
         SELECT FROM information_schema.tables
-        WHERE table_schema = 'marketr'
+        WHERE table_schema = 'public'
         AND table_name = ${tableName}
       )`
     )
