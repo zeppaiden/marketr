@@ -1,6 +1,15 @@
 import "@/styles/globals.css"
 
 import type { Metadata } from "next"
+import { Suspense } from "react"
+
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from "@clerk/nextjs"
 
 export const metadata: Metadata = {
   title: "Marketr",
@@ -13,7 +22,19 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Suspense fallback={<div>Loading authentication...</div>}>
+          <ClerkProvider>
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+            {children}
+          </ClerkProvider>
+        </Suspense>
+      </body>
     </html>
   )
 }
