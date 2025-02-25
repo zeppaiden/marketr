@@ -12,7 +12,8 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
     VERCEL_URL: z.string().optional(),
-    CLERK_SECRET_KEY: z.string()
+    CLERK_SECRET_KEY: z.string(),
+    INNGEST_SIGNING_KEY: z.string(),
   },
 
   /**
@@ -31,13 +32,14 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
-    DATABASE_URL: process.env.DATABASE_URL,
-    NODE_ENV: process.env.NODE_ENV,
-    VERCEL_URL: process.env.VERCEL_URL,
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+    DATABASE_URL: process.env.DATABASE_URL,
+    INNGEST_SIGNING_KEY: process.env.INNGEST_SIGNING_KEY,
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NODE_ENV: process.env.NODE_ENV,
+    VERCEL_URL: process.env.VERCEL_URL
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
