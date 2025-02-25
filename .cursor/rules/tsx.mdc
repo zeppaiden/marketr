@@ -1,0 +1,250 @@
+# React TSX Structure Standards
+
+Standards for writing professionally structured React TSX files.
+
+<rule>
+name: tsx_structure
+description: Standards for creating well-structured, maintainable React TSX components
+filters:
+  - type: file_extension
+    pattern: "\\.tsx$"
+  - type: event
+    pattern: "file_create|file_update"
+
+actions:
+  - type: suggest
+    message: |
+      When structuring React TSX files:
+
+      1. File Organization:
+         - Use a consistent component structure:
+           a. Imports
+           b. Type definitions (especially Props interface)
+           c. Component function
+           d. Helper functions/hooks (if needed)
+           e. Exports
+
+         ```tsx
+         // Component file structure example
+         import React, { useState, useEffect } from 'react';
+         
+         import { fetchData } from '@/lib/api';
+         import { Card } from '@/components/ui/Card';
+         
+         interface UserCardProps {
+           userId: string;
+           isEditable?: boolean;
+         }
+         
+         export function UserCard({ userId, isEditable = false }: UserCardProps) {
+           // Component implementation
+           return (
+             <Card>
+               {/* JSX content */}
+             </Card>
+           );
+         }
+         ```
+
+      2. Props Handling:
+         - Define props using interfaces with the naming pattern `ComponentNameProps`
+         - Use optional modifiers (?) for non-required props
+         - Provide default values using parameter defaults
+         - Document complex props with JSDoc comments
+
+         ```tsx
+         interface ButtonProps {
+           /** The text content to display in the button */
+           label: string;
+           /** Optional click handler */
+           onClick?: () => void;
+           /** Visual variant of the button */
+           variant?: 'primary' | 'secondary' | 'outline';
+           /** Whether the button is in a disabled state */
+           disabled?: boolean;
+         }
+         
+         export function Button({
+           label,
+           onClick,
+           variant = 'primary',
+           disabled = false
+         }: ButtonProps) {
+           // Component implementation
+         }
+         ```
+
+      3. Component Structure:
+         - Use function declarations for components
+         - Always include explicit return type (React.ReactNode or more specific)
+         - Keep components focused on a single responsibility
+         - Extract complex logic into custom hooks
+         - Memoize expensive components with React.memo()
+
+         ```tsx
+         /** 
+          * Displays a searchable user list with pagination
+          */
+         export function UserList({ users, perPage }: UserListProps): React.ReactNode {
+           const { 
+             filteredUsers, 
+             search, 
+             handleSearchChange 
+           } = useUserSearch(users);
+           
+           // Component implementation
+         }
+         ```
+
+      4. Hooks Organization:
+         - Place hooks at the beginning of component body
+         - Group related hooks together
+         - Extract complex hook logic to custom hooks
+         - Follow hooks naming convention: use[HookName]
+
+         ```tsx
+         function ProductDisplay({ productId }: ProductDisplayProps): React.ReactNode {
+           // State hooks
+           const [quantity, setQuantity] = useState(1);
+           
+           // Data/effect hooks
+           const { product, isLoading } = useProduct(productId);
+           
+           // Derived values
+           const totalPrice = product ? product.price * quantity : 0;
+           
+           // Handlers
+           const handleQuantityChange = (newQuantity: number) => {
+             setQuantity(Math.max(1, newQuantity));
+           };
+           
+           // Render logic
+           if (isLoading) return <Spinner />;
+           
+           return (
+             // JSX
+           );
+         }
+         ```
+
+      5. JSX Formatting:
+         - Indent JSX elements consistently
+         - Use fragment shorthand (<>) when possible
+         - Break down complex components into smaller parts
+         - Use conditional rendering patterns appropriately
+         - Format attributes consistently (one per line when many)
+
+         ```tsx
+         // Good JSX organization
+         return (
+           <div className="container">
+             <h1>{title}</h1>
+             
+             {isLoading ? (
+               <Spinner />
+             ) : items.length > 0 ? (
+               <ul>
+                 {items.map(item => (
+                   <li key={item.id} className="item">
+                     {item.name}
+                   </li>
+                 ))}
+               </ul>
+             ) : (
+               <p>No items found</p>
+             )}
+             
+             <Button
+               label="Load more"
+               variant="primary"
+               onClick={handleLoadMore}
+               disabled={isLoading || !hasMore}
+             />
+           </div>
+         );
+         ```
+
+examples:
+  - input: |
+      // Bad: Unstructured component
+      const UserCard = props => {
+        let [isExpanded, setIsExpanded] = React.useState(false);
+        return <div>
+          <h2>{props.name}</h2>
+          <button onClick={() => setIsExpanded(!isExpanded)}>
+            {isExpanded ? 'Show Less' : 'Show More'}
+          </button>
+          {isExpanded && <p>{props.bio}</p>}
+        </div>;
+      }
+      export default UserCard;
+
+      // Good: Well-structured component
+      import React, { useState } from 'react';
+      
+      interface UserCardProps {
+        name: string;
+        bio?: string;
+      }
+      
+      export function UserCard({ name, bio = '' }: UserCardProps): React.ReactNode {
+        const [isExpanded, setIsExpanded] = useState(false);
+        
+        const toggleExpanded = () => setIsExpanded(prev => !prev);
+        
+        return (
+          <div className="user-card">
+            <h2>{name}</h2>
+            <button 
+              onClick={toggleExpanded}
+              aria-expanded={isExpanded}
+            >
+              {isExpanded ? 'Show Less' : 'Show More'}
+            </button>
+            
+            {isExpanded && bio && <p>{bio}</p>}
+          </div>
+        );
+      }
+    output: "Correctly structured React component"
+
+  - input: |
+      // Bad: Props handling
+      function Button(props) {
+        return <button className={props.primary ? 'primary' : 'secondary'} disabled={props.disabled}>{props.children}</button>
+      }
+      
+      // Good: Proper props typing and handling
+      interface ButtonProps {
+        /** Whether to show in primary style */
+        primary?: boolean;
+        /** Whether the button is disabled */
+        disabled?: boolean;
+        /** Button content */
+        children: React.ReactNode;
+        /** Click handler */
+        onClick?: () => void;
+      }
+      
+      export function Button({
+        primary = false,
+        disabled = false,
+        children,
+        onClick
+      }: ButtonProps): React.ReactNode {
+        return (
+          <button
+            className={primary ? 'primary' : 'secondary'}
+            disabled={disabled}
+            onClick={onClick}
+          >
+            {children}
+          </button>
+        );
+      }
+    output: "Correctly typed and structured button component"
+
+metadata:
+  priority: medium
+  version: 1.0
+</rule>

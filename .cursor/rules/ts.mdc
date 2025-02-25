@@ -1,0 +1,191 @@
+---
+description: Typescript structure standards
+globs: src/**/*.ts
+alwaysApply: false
+---
+# TypeScript Structure Standards
+
+Standards for writing professionally structured TypeScript files.
+
+<rule>
+name: typescript_structure
+description: Standards for creating well-structured, maintainable TypeScript files
+filters:
+  - type: file_extension
+    pattern: "\\.(ts|tsx)$"
+  - type: event
+    pattern: "file_create|file_update"
+
+actions:
+  - type: reject
+    conditions:
+      - pattern: "enum\\s+[A-Za-z]+"
+        message: "Do not use TypeScript enums. Use 'as const' objects instead."
+
+  - type: suggest
+    message: |
+      When structuring TypeScript files:
+
+      1. Imports Organization:
+         - Group imports in the following order, separated by blank lines:
+           a. Node built-in modules
+           b. External NPM packages
+           c. Internal project imports (absolute paths)
+           d. Internal project imports (relative paths)
+         - ALWAYS use '@/...' absolute import syntax whenever possible
+         - Only use relative imports for files in the same directory or direct parent/child directories
+         - Sort alphabetically within each group
+         - Use destructuring for named imports when importing multiple items
+
+         ```typescript
+         // Good import structure
+         import fs from 'fs';
+         import path from 'path';
+         
+         import type { User } from '@prisma/client';
+         import { z } from 'zod';
+         
+         import { config } from '@/config';
+         import { formatter } from '@/utils/format';
+         import { logger } from '@/lib/logger';
+         
+         import { formatDate } from './utils/date';
+         import type { UserResponse } from './types';
+         ```
+
+         ```typescript
+         // Bad: Using relative imports when absolute imports would be better
+         import { formatDate } from '../../utils/format';
+         import { logger } from '../../../lib/logger';
+         
+         // Good: Using '@/...' syntax for imports from other directories
+         import { formatDate } from '@/utils/format';
+         import { logger } from '@/lib/logger';
+         ```
+
+      2. Type Definitions:
+         - Place interfaces, types, and constants at the top of the file
+         - Use PascalCase for types and interfaces
+         - Use descriptive names that explain purpose, not implementation
+         - Prefer interfaces for object shapes that will be instantiated
+         - Use type for unions, intersections, and mapped types
+
+         ```typescript
+         // Good type definitions
+         interface UserData {
+           id: string;
+           name: string;
+           email: string;
+         }
+
+         type UserRole = 'admin' | 'user' | 'guest';
+
+         // Instead of enum, use 'as const' objects
+         const UserStatus = {
+           ACTIVE: 'active',
+           PENDING: 'pending',
+           SUSPENDED: 'suspended'
+         } as const;
+         
+         type UserStatus = typeof UserStatus[keyof typeof UserStatus];
+         ```
+
+      3. Export Patterns:
+         - Prefer named exports over default exports
+         - For larger files, use a consolidated export block at the end
+         - Export interfaces and types without the 'export' prefix when declaring
+         - Don't export implementation details
+
+         ```typescript
+         // At the top of the file
+         interface UserData {
+           id: string;
+           name: string;
+         }
+         
+         function formatUser(user: UserData): string {
+           return `${user.name} (${user.id})`;
+         }
+         
+         // At the bottom of the file
+         export { UserData, formatUser };
+         ```
+
+      4. Function Structure:
+         - Use function declarations for top-level functions
+         - Use arrow functions for callbacks and methods
+         - Include return type annotations for public functions
+         - Add JSDoc comments for non-trivial functions
+
+         ```typescript
+         /**
+          * Retrieves user data and formats it for display
+          * @param userId - The unique identifier for the user
+          * @returns Formatted user information
+          */
+         async function getUserDisplay(userId: string): Promise<string> {
+           const user = await fetchUser(userId);
+           return formatUser(user);
+         }
+         ```
+
+      5. Comments and Documentation:
+         - Use JSDoc comments for exported functions and types
+         - Add inline comments for complex logic
+         - Keep comments focused on why, not what
+         - Update comments when updating code
+
+examples:
+  - input: |
+      // Bad: Using enums
+      enum UserRole {
+        ADMIN = 'admin',
+        USER = 'user',
+        GUEST = 'guest'
+      }
+
+      // Good: Using as const
+      const UserRole = {
+        ADMIN: 'admin',
+        USER: 'user',
+        GUEST: 'guest'
+      } as const;
+      
+      type UserRole = typeof UserRole[keyof typeof UserRole];
+    output: "Correctly using 'as const' instead of enums"
+
+  - input: |
+      // Bad: Unorganized imports
+      import { formatDate } from '../utils/date';
+      import path from 'path';
+      import { z } from 'zod';
+      import { config } from '@/config';
+      import fs from 'fs';
+
+      // Good: Organized imports
+      import fs from 'fs';
+      import path from 'path';
+      
+      import type { User } from '@prisma/client';
+      import { z } from 'zod';
+      
+      import { config } from '@/config';
+      
+      import { formatDate } from '../utils/date';
+      import type { UserResponse } from './types';
+    output: "Correctly organized imports"
+
+  - input: |
+      // Bad: Using relative imports for non-adjacent directories
+      import { formatDate } from '../../utils/formatters/date';
+      import { validateUser } from '../../../lib/validation/user';
+      
+      // Good: Using '@/...' syntax for imports
+      import { formatDate } from '@/utils/formatters/date';
+      import { validateUser } from '@/lib/validation/user';
+    output: "Correctly using '@/...' import syntax"
+
+metadata:
+  priority: medium
+  version: 1.0
+</rule>
