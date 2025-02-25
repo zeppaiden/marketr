@@ -1,7 +1,8 @@
 import "@/styles/globals.css"
 
 import type { Metadata } from "next"
-import { Suspense } from "react"
+import React from "react"
+import { env } from "@/env"
 
 import {
   ClerkProvider,
@@ -23,8 +24,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Suspense fallback={<div>Loading authentication...</div>}>
-          <ClerkProvider>
+        <React.Suspense fallback={<div>Loading authentication...</div>}>
+          <ClerkProvider
+            signInForceRedirectUrl={env.CLERK_SIGN_IN_FORCE_REDIRECT_URL}
+            signUpForceRedirectUrl={env.CLERK_SIGN_UP_FORCE_REDIRECT_URL}
+          >
             <SignedOut>
               <SignInButton />
             </SignedOut>
@@ -33,7 +37,7 @@ export default function RootLayout({
             </SignedIn>
             {children}
           </ClerkProvider>
-        </Suspense>
+        </React.Suspense>
       </body>
     </html>
   )
