@@ -135,6 +135,24 @@ actions:
          - Keep comments focused on why, not what
          - Update comments when updating code
 
+      6. String Quotation:
+         - Always use double quotes for strings
+         - Use template literals only when interpolating values
+         - Maintain consistent quotation style across the codebase
+
+         ```typescript
+         // Bad: Using single quotes
+         const name = 'John Doe';
+         const greeting = 'Hello there';
+         
+         // Good: Using double quotes
+         const name = "John Doe";
+         const greeting = "Hello there";
+         
+         // Good: Using template literals for interpolation
+         const message = `${greeting}, ${name}!`;
+         ```
+
 examples:
   - input: |
       // Bad: Using enums
