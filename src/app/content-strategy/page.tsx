@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { CalendarView, ScheduledContentItem } from "@/components/calendar/CalendarView";
-import { ContentRecommendations } from "@/components/calendar/ContentRecommendations";
-import { RefreshSuggestions } from "@/components/calendar/RefreshSuggestions";
+import { UnifiedContentTable } from "@/components/calendar/UnifiedContentTable";
 import { ContentPillSidebar } from "@/components/calendar/ContentPillSidebar";
 import { ExportDialog } from "@/components/calendar/ExportDialog";
 import { ContentPill } from "@/components/calendar/DraggableContentPill";
@@ -68,7 +67,7 @@ const mockCalendarContent: ScheduledContentItem[] = [
   }
 ];
 
-export default function CalendarPage() {
+export default function ContentStrategyPage() {
   const [timeRange, setTimeRange] = useState("3months");
   const [showExportDialog, setShowExportDialog] = useState(false);
   // State for calendar items and removed items
@@ -114,7 +113,7 @@ export default function CalendarPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Content Strategy Calendar</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Content Strategy</h1>
         <div className="flex items-center gap-3">
           <Button 
             onClick={() => setShowExportDialog(true)}
@@ -122,16 +121,15 @@ export default function CalendarPage() {
             variant="default"
           >
             <Download className="mr-2 h-4 w-4" />
-            Export Calendar
+            Export Strategy
           </Button>
         </div>
       </div>
       
       <Tabs defaultValue="calendar">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="calendar">Calendar View</TabsTrigger>
           <TabsTrigger value="recommendations">Content Recommendations</TabsTrigger>
-          <TabsTrigger value="refresh">Refresh Suggestions</TabsTrigger>
         </TabsList>
         
         <TabsContent value="calendar" className="mt-4">
@@ -158,13 +156,7 @@ export default function CalendarPage() {
         
         <TabsContent value="recommendations" className="mt-4">
           <div className="rounded-lg border border-gray-200 bg-white p-4">
-            <ContentRecommendations />
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="refresh" className="mt-4">
-          <div className="rounded-lg border border-gray-200 bg-white p-4">
-            <RefreshSuggestions />
+            <UnifiedContentTable />
           </div>
         </TabsContent>
       </Tabs>

@@ -264,7 +264,7 @@ export default async function ContentRecommendationPage({ params }: { params: { 
   return (
     <div className="container mx-auto max-w-4xl py-8">
       <div className="mb-6">
-        <Link href="/calendar" passHref>
+        <Link href="/content-strategy" passHref>
           <Button variant="ghost" className="flex items-center gap-1">
             <ArrowLeft className="h-4 w-4" />
             Back to Content Recommendations

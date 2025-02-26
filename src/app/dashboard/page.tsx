@@ -53,14 +53,14 @@ export default function DashboardPage() {
                   <span>Analysis complete!</span>
                 </p>
                 <p className="mt-2 text-sm">
-                  We've analyzed your content and generated recommendations. View your content strategy in the calendar section.
+                  We've analyzed your content and generated recommendations. View your content strategy in the content strategy section.
                 </p>
                 <div className="mt-4 flex gap-2">
                   <a 
-                    href="/calendar" 
+                    href="/content-strategy" 
                     className="rounded-md bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-800"
                   >
-                    View calendar
+                    View content strategy
                   </a>
                   <a 
                     href="/analysis" 

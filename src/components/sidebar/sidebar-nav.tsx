@@ -30,8 +30,8 @@ export function SidebarNav({ collapsed }: SidebarNavProps): React.ReactNode {
       icon: <LayoutDashboard className="h-5 w-5" />
     },
     {
-      title: "Calendar",
-      href: "/calendar",
+      title: "Content Strategy",
+      href: "/content-strategy",
       icon: <Calendar className="h-5 w-5" />
     },
     {
