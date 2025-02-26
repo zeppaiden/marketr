@@ -7,6 +7,11 @@ const events = {
       url: z.string()
     })
   },
+  "firecrawl/batch-scrape": {
+    data: z.object({
+      urls: z.array(z.string().url())
+    })
+  }
 }
 
 export const inngest = new Inngest({
