@@ -4,6 +4,7 @@ import * as React from "react"
 import { useState } from "react"
 import { PlusCircle, Upload, GanttChart, BarChart3, Calendar } from "lucide-react"
 import { UrlInput } from "@/components/UrlInput"
+import { DashboardContentTable } from "@/components/DashboardContentTable"
 
 export default function DashboardPage() {
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
@@ -115,6 +116,15 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+
+        {/* Analyzed Content Section */}
+        <div className="rounded-lg border border-gray-200 bg-white p-6">
+          <h2 className="mb-4 text-xl font-semibold">Analyzed Content</h2>
+          <p className="mb-4 text-sm text-gray-500">
+            Content from your website that has been analyzed for improvement opportunities.
+          </p>
+          <DashboardContentTable />
+        </div>
         
         {/* Recent Activity Section */}
         <div className="rounded-lg border border-gray-200 bg-white p-6">
@@ -148,7 +158,7 @@ export default function DashboardPage() {
               </div>
               <div>
                 <p className="text-sm font-medium">Calendar updated</p>
-                <p className="text-xs text-gray-500">Added 8 new content pieces to your calendar</p>
+                <p className="text-xs text-gray-500">Content calendar synced with 8 new content items</p>
               </div>
               <div className="ml-auto text-xs text-gray-400">1 hour ago</div>
             </div>
