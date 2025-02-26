@@ -16,6 +16,7 @@ export const env = createEnv({
     INNGEST_SIGNING_KEY: z.string(),
     CLERK_SIGN_IN_FORCE_REDIRECT_URL: z.string().optional(),
     CLERK_SIGN_UP_FORCE_REDIRECT_URL: z.string().optional(),
+    FIRECRAWL_API_KEY: z.string()
   },
 
   /**
@@ -43,7 +44,8 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     VERCEL_URL: process.env.VERCEL_URL,
     CLERK_SIGN_IN_FORCE_REDIRECT_URL: process.env.CLERK_SIGN_IN_FORCE_REDIRECT_URL,
-    CLERK_SIGN_UP_FORCE_REDIRECT_URL: process.env.CLERK_SIGN_UP_FORCE_REDIRECT_URL
+    CLERK_SIGN_UP_FORCE_REDIRECT_URL: process.env.CLERK_SIGN_UP_FORCE_REDIRECT_URL,
+    FIRECRAWL_API_KEY: process.env.FIRECRAWL_API_KEY
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

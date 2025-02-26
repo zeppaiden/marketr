@@ -2,6 +2,11 @@ import { EventSchemas, type GetEvents, Inngest } from "inngest"
 import { z } from "zod"
 
 const events = {
+  "firecrawl/scrape": {
+    data: z.object({
+      url: z.string()
+    })
+  },
   "test/hello.world": {
     data: z.object({
       name: z.string()
