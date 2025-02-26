@@ -23,12 +23,12 @@ export function UrlInput({ onAnalyze }: UrlInputProps) {
     try {
       new URL(url);
       return true;
-    } catch (e) {
+    } catch {
       return false;
     }
   };
   
-  const addUrl = () => {
+  const addUrl = async () => {
     // Reset any previous errors
     setError(null);
     
@@ -50,18 +50,36 @@ export function UrlInput({ onAnalyze }: UrlInputProps) {
       return;
     }
     
-    // Simulate URL validation (checking if it's accessible)
+    // Set validating state
     setIsValidating(true);
     
-    setTimeout(() => {
+    try {
+      // Trigger the inngest scrape function via API route
+      const response = await fetch("/api/scrape", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: currentUrl }),
+      });
+      
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to scrape URL");
+      }
+
       // Add the URL to the list
       setUrls([...urls, currentUrl]);
       
       // Clear the input
       setCurrentUrl("");
+      toast.success("URL added and scraping started");
+    } catch (err) {
+      console.error("Error scraping URL:", err);
+      setError(err instanceof Error ? err.message : "Failed to process URL");
+    } finally {
       setIsValidating(false);
-      toast.success("URL added successfully");
-    }, 800);
+    }
   };
   
   const removeUrl = (urlToRemove: string) => {
@@ -112,13 +130,11 @@ export function UrlInput({ onAnalyze }: UrlInputProps) {
         >
           {isValidating ? (
             <>
-              <div className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent"></div>
+              <div className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
               <span>Validating...</span>
             </>
           ) : (
-            <>
-              <span>Add URL</span>
-            </>
+            <span>Add URL</span>
           )}
         </Button>
         <Button
@@ -142,8 +158,8 @@ export function UrlInput({ onAnalyze }: UrlInputProps) {
         <Card className="p-4">
           <h3 className="mb-2 text-sm font-medium">Added URLs ({urls.length})</h3>
           <div className="space-y-2">
-            {urls.map((url, index) => (
-              <div key={index} className="flex items-center justify-between rounded-md bg-muted p-2 text-sm">
+            {urls.map((url) => (
+              <div key={url} className="flex items-center justify-between rounded-md bg-muted p-2 text-sm">
                 <span className="font-mono">{url}</span>
                 <Button
                   type="button"
@@ -161,7 +177,7 @@ export function UrlInput({ onAnalyze }: UrlInputProps) {
       )}
       
       {urls.length > 0 && (
-        <Alert variant="info">
+        <Alert variant="default">
           <Info className="h-4 w-4" />
           <AlertDescription>
             <strong>Tip:</strong> For best results, include a diverse set of content URLs
