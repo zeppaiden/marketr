@@ -185,12 +185,7 @@ export function CalendarView({
           {day}
         </div>
         <div className="relative overflow-visible h-[calc(100%-18px)]">
-          {contentForDay.length > 0 && (
-            <div className="pb-1 text-[9px] text-gray-500 flex items-center">
-              <span>{contentForDay.length} item{contentForDay.length > 1 ? 's' : ''}</span>
-            </div>
-          )}
-          <div className="relative" style={{ height: `${Math.min(contentForDay.length * 20, 90)}px` }}>
+          <div className="relative h-full" style={{ maxHeight: `${Math.min(contentForDay.length * 20, 90)}px` }}>
             {contentForDay.slice().reverse().map((item, index) => (
               <Popover key={`${item.id}-${day}`}>
                 <PopoverTrigger asChild>

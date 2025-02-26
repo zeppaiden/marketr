@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils"
 import { 
   LayoutDashboard, 
   Calendar, 
-  Settings 
+  Settings,
+  BarChart2 
 } from "lucide-react"
 
 interface SidebarNavProps {
@@ -32,6 +33,11 @@ export function SidebarNav({ collapsed }: SidebarNavProps): React.ReactNode {
       title: "Calendar",
       href: "/calendar",
       icon: <Calendar className="h-5 w-5" />
+    },
+    {
+      title: "Reports",
+      href: "/reports",
+      icon: <BarChart2 className="h-5 w-5" />
     },
     {
       title: "Settings",
