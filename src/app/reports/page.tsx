@@ -165,6 +165,7 @@ export default function ReportsPage() {
                   dataKey="adoptionRate"
                   strokeWidth={2}
                   dot={{ r: 4 }}
+                  stroke="var(--chart-1)"
                 />
               </LineChart>
             </ChartContainer>
@@ -186,7 +187,7 @@ export default function ReportsPage() {
           </CardHeader>
           <CardContent>
             <ChartContainer config={timeChartConfig} className="h-[300px] w-full">
-              <BarChart accessibilityLayer data={data}>
+              <BarChart accessibilityLayer data={data} barGap={8} barCategoryGap={24}>
                 <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey={xAxisKey}
@@ -202,7 +203,10 @@ export default function ReportsPage() {
                 <ChartTooltip content={<ChartTooltipContent />} />
                 <Bar
                   dataKey="timeSaved"
-                  radius={4}
+                  radius={6}
+                  fill="var(--chart-2)"
+                  barSize={40}
+                  fillOpacity={0.85}
                 />
               </BarChart>
             </ChartContainer>
@@ -243,6 +247,7 @@ export default function ReportsPage() {
                   dataKey="seoImprovement"
                   strokeWidth={2}
                   dot={{ r: 4 }}
+                  stroke="var(--chart-3)"
                 />
               </LineChart>
             </ChartContainer>
@@ -264,7 +269,7 @@ export default function ReportsPage() {
           </CardHeader>
           <CardContent>
             <ChartContainer config={engagementChartConfig} className="h-[300px] w-full">
-              <BarChart accessibilityLayer data={engagementByFormat}>
+              <BarChart accessibilityLayer data={engagementByFormat} barGap={0} barCategoryGap={40}>
                 <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey="format"
@@ -278,10 +283,10 @@ export default function ReportsPage() {
                 />
                 <ChartTooltip content={<ChartTooltipContent />} />
                 <ChartLegend content={<ChartLegendContent />} />
-                <Bar dataKey="views" radius={4} stackId="a" />
-                <Bar dataKey="likes" radius={4} stackId="a" />
-                <Bar dataKey="comments" radius={4} stackId="a" />
-                <Bar dataKey="shares" radius={4} stackId="a" />
+                <Bar dataKey="views" radius={4} stackId="a" fill="var(--chart-1)" barSize={50} fillOpacity={1} />
+                <Bar dataKey="likes" radius={4} stackId="a" fill="var(--chart-2)" fillOpacity={0.9} />
+                <Bar dataKey="comments" radius={4} stackId="a" fill="var(--chart-3)" fillOpacity={0.8} />
+                <Bar dataKey="shares" radius={4} stackId="a" fill="var(--chart-4)" fillOpacity={0.7} />
               </BarChart>
             </ChartContainer>
           </CardContent>
@@ -320,6 +325,7 @@ export default function ReportsPage() {
                   dataKey="leads"
                   strokeWidth={2}
                   dot={{ r: 4 }}
+                  stroke="var(--chart-5)"
                 />
               </LineChart>
             </ChartContainer>
