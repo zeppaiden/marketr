@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Calendar, Clock, RefreshCw } from "lucide-react";
+import { ContentPill } from "./DraggableContentPill";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 // mock data for demonstration
 const MONTHS = [
@@ -17,62 +23,62 @@ const CONTENT_TYPES = {
   refresh: { color: "bg-yellow-100 text-yellow-800 border-yellow-200" },
 };
 
-type ContentItem = {
-  id: string;
-  title: string;
-  type: keyof typeof CONTENT_TYPES;
+export type ScheduledContentItem = ContentPill & {
   date: Date;
-  audience: string;
-  impact: "high" | "medium" | "low";
 };
 
-// mock content data
-const mockContentItems: ContentItem[] = [
+// Mock initial scheduled content
+const INITIAL_SCHEDULED_CONTENT: ScheduledContentItem[] = [
   {
-    id: "1",
-    title: "10 ways to improve your content strategy",
+    id: "scheduled-1",
+    title: "10 Ways to Improve Your Content Strategy",
     type: "blog",
-    date: new Date(2023, 2, 5),
-    audience: "marketing VPs",
-    impact: "high",
+    date: new Date(2023, 2, 5)
   },
   {
-    id: "2",
-    title: "content marketing ROI explained",
+    id: "scheduled-2",
+    title: "Content Marketing ROI Explained",
     type: "video",
-    date: new Date(2023, 2, 12),
-    audience: "marketing teams",
-    impact: "medium",
+    date: new Date(2023, 2, 12)
   },
   {
-    id: "3",
-    title: "the future of SEO in 2023",
+    id: "scheduled-3",
+    title: "The Future of SEO in 2023",
     type: "infographic",
-    date: new Date(2023, 2, 18),
-    audience: "content strategists",
-    impact: "high",
+    date: new Date(2023, 2, 18)
   },
   {
-    id: "4",
-    title: "interview with content marketing experts",
+    id: "scheduled-4",
+    title: "Interview with Content Marketing Experts",
     type: "podcast",
-    date: new Date(2023, 2, 25),
-    audience: "marketing VPs",
-    impact: "medium",
+    date: new Date(2023, 2, 25)
   },
   {
-    id: "5",
-    title: "refresh: optimizing your blog for voice search",
-    type: "refresh",
-    date: new Date(2023, 2, 8),
-    audience: "SEO specialists",
-    impact: "medium",
-  },
+    id: "scheduled-5",
+    title: "Optimizing Your Blog for Voice Search",
+    type: "blog",
+    isRefresh: true,
+    date: new Date(2023, 2, 8)
+  }
 ];
 
-export function CalendarView() {
+interface CalendarViewProps {
+  scheduledItems: ScheduledContentItem[];
+  onScheduleContentPill?: (pill: ContentPill, date: Date) => void;
+  onRemoveContentPill?: (pill: ScheduledContentItem) => void;
+}
+
+export function CalendarView({ 
+  scheduledItems,
+  onScheduleContentPill,
+  onRemoveContentPill
+}: CalendarViewProps) {
   const [currentMonth, setCurrentMonth] = useState(2); // March (0-indexed)
   const [currentYear, setCurrentYear] = useState(2023);
+  // State for tracking drag operations
+  const [isDraggingOver, setIsDraggingOver] = useState<number | null>(null);
+  // State for tracking which item is being dragged
+  const [draggingItemId, setDraggingItemId] = useState<string | null>(null);
   
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
@@ -95,8 +101,49 @@ export function CalendarView() {
     }
   };
   
+  // Handler for when content is dropped on a calendar day
+  const handleDrop = (e: React.DragEvent, day: number) => {
+    e.preventDefault();
+    setIsDraggingOver(null);
+    
+    try {
+      // Try to get data from the dataTransfer
+      const contentData = e.dataTransfer.getData("application/json");
+      
+      if (contentData && onScheduleContentPill) {
+        const pill = JSON.parse(contentData) as ContentPill;
+        const date = new Date(currentYear, currentMonth, day);
+        
+        // Call the parent callback to update the pills
+        onScheduleContentPill(pill, date);
+        
+        setDraggingItemId(null);
+      }
+    } catch (error) {
+      console.error("Error parsing dropped content:", error);
+    }
+  };
+  
+  // Handler for drag over
+  const handleDragOver = (e: React.DragEvent, day: number) => {
+    e.preventDefault();
+    setIsDraggingOver(day);
+  };
+  
+  // Handler for drag leave
+  const handleDragLeave = () => {
+    setIsDraggingOver(null);
+  };
+  
+  // Handler for when a calendar item starts being dragged
+  const handleCalendarItemDragStart = (e: React.DragEvent, item: ScheduledContentItem) => {
+    setDraggingItemId(item.id);
+    // Set data transfer for compatibility with the drop handler
+    e.dataTransfer.setData("application/json", JSON.stringify(item));
+  };
+  
   // filter content items for current month
-  const contentForMonth = mockContentItems.filter(
+  const contentForMonth = scheduledItems.filter(
     item => item.date.getMonth() === currentMonth && item.date.getFullYear() === currentYear
   );
   
@@ -105,7 +152,7 @@ export function CalendarView() {
   
   // add empty cells for days before the first day of month
   for (let i = 0; i < firstDayOfMonth; i++) {
-    calendarDays.push(<div key={`empty-${i}`} className="h-24 border border-gray-100 bg-gray-50" />);
+    calendarDays.push(<div key={`empty-${i}`} className="h-36 border border-gray-100 bg-gray-50" />);
   }
   
   // add cells for each day of the month
@@ -114,19 +161,119 @@ export function CalendarView() {
       item => item.date.getDate() === day
     );
     
+    const isDraggedOver = isDraggingOver === day;
+    const isToday = day === new Date().getDate() && currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear();
+    const isWeekend = new Date(currentYear, currentMonth, day).getDay() === 0 || new Date(currentYear, currentMonth, day).getDay() === 6;
+    
     calendarDays.push(
-      <div key={`day-${day}`} className="h-24 border border-gray-100 p-1">
-        <div className="text-xs font-medium text-gray-500">{day}</div>
-        <div className="mt-1 space-y-1 overflow-y-auto max-h-[80px]">
-          {contentForDay.map(item => (
-            <div 
-              key={item.id}
-              className={`text-xs p-1 rounded border ${CONTENT_TYPES[item.type].color} cursor-pointer`}
-              title={`${item.title} - Impact: ${item.impact}`}
-            >
-              {item.title.length > 20 ? `${item.title.substring(0, 20)}...` : item.title}
+      <div 
+        key={`day-${day}`} 
+        className={`h-36 border relative ${
+          isDraggedOver 
+            ? 'border-blue-400 bg-blue-50' 
+            : isToday
+              ? 'border-blue-300 bg-blue-50'
+              : isWeekend
+                ? 'border-gray-100 bg-gray-50/50'
+                : 'border-gray-100'
+        } p-1 transition-colors`}
+        onDrop={(e) => handleDrop(e, day)}
+        onDragOver={(e) => handleDragOver(e, day)}
+        onDragLeave={handleDragLeave}
+      >
+        <div className={`text-xs font-medium ${isToday ? 'bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center' : 'text-gray-500'} mb-2`}>
+          {day}
+        </div>
+        <div className="relative overflow-visible h-[calc(100%-18px)]">
+          {contentForDay.length > 0 && (
+            <div className="pb-1 text-[9px] text-gray-500 flex items-center">
+              <span>{contentForDay.length} item{contentForDay.length > 1 ? 's' : ''}</span>
             </div>
-          ))}
+          )}
+          <div className="relative" style={{ height: `${Math.min(contentForDay.length * 20, 90)}px` }}>
+            {contentForDay.slice().reverse().map((item, index) => (
+              <Popover key={`${item.id}-${day}`}>
+                <PopoverTrigger asChild>
+                  <div 
+                    className={`text-xs p-1.5 rounded-md border ${item.isRefresh ? 'border-dashed' : 'border-solid'} 
+                      ${CONTENT_TYPES[item.type].color} cursor-pointer 
+                      absolute w-[calc(100%-0.5rem)] 
+                      transition-all duration-200 ease-in-out
+                      hover:z-20 hover:shadow-md hover:scale-[1.03] hover:brightness-95 hover:translate-y-[-2px]
+                      active:scale-[0.98] active:brightness-90`}
+                    style={{ 
+                      top: `${index * 16}px`,
+                      zIndex: index,
+                      opacity: index < contentForDay.length - 4 && index !== 0 ? 0.7 : 1
+                    }}
+                    title={`${item.title} (Click to view details)`}
+                    draggable
+                    onDragStart={(e) => handleCalendarItemDragStart(e, item)}
+                  >
+                    <div className="flex items-center gap-1.5 min-h-[16px]">
+                      <span className="flex-shrink-0 text-base">{item.type === "refresh" ? "🔄" : item.type === "blog" ? "📝" : item.type === "video" ? "🎬" : item.type === "infographic" ? "📊" : "🎙️"}</span>
+                      <span className="truncate">
+                        {item.title.length > 18 ? `${item.title.substring(0, 18)}...` : item.title}
+                      </span>
+                    </div>
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 p-0 shadow-lg rounded-lg overflow-hidden border border-gray-200"
+                                side="top"
+                                align="start"
+                                sideOffset={5}>
+                  <div className="p-4">
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">
+                          {item.type === "refresh" ? "🔄" : item.type === "blog" ? "📝" : 
+                           item.type === "video" ? "🎬" : item.type === "infographic" ? "📊" : "🎙️"}
+                        </span>
+                        <div>
+                          <h3 className="text-base font-medium">{item.title}</h3>
+                          <p className="text-gray-500 capitalize text-sm">{item.type} {item.isRefresh ? '(Refresh)' : ''}</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 gap-3 mb-3">
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Calendar className="h-4 w-4 text-gray-400" />
+                        <span>Scheduled for {item.date.toLocaleDateString('en-US', { 
+                          weekday: 'short', 
+                          month: 'short', 
+                          day: 'numeric' 
+                        })}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Clock className="h-4 w-4 text-gray-400" />
+                        <span>Est. creation time: 3 hours</span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-700">Content Brief</h4>
+                        <p className="text-sm text-gray-600 mt-1">
+                          {item.isRefresh 
+                            ? `Update the existing ${item.type} with current information and trends for 2023.` 
+                            : `Create a comprehensive ${item.type} that explores ${item.title.toLowerCase()} with actionable insights.`}
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-700">Instructions</h4>
+                        <div className="text-sm text-gray-600 mt-1 flex items-start gap-2">
+                          <RefreshCw className="h-4 w-4 text-gray-400 mt-0.5" />
+                          <p>To unschedule this content, drag it to the "Unscheduled Content" sidebar.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            ))}
+          </div>
         </div>
       </div>
     );

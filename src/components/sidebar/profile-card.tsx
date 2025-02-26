@@ -16,7 +16,7 @@ export function ProfileCard({ collapsed }: ProfileCardProps): React.ReactNode {
       {!collapsed && (
         <div className="ml-3 flex flex-col">
           <span className="text-sm font-medium text-gray-700">Profile</span>
-          <span className="text-xs text-gray-500">Account settings</span>
+          <span className="text-xs text-gray-500">Account Settings</span>
         </div>
       )}
     </div>

@@ -6,20 +6,20 @@ export default function AnalysisPage() {
     <React.Suspense>
       <div className="space-y-8">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-gray-900">content analysis</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Content Analysis</h1>
           <div className="flex items-center gap-2">
             <button
               type="button"
               className="flex items-center gap-2 rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
             >
               <RefreshCw className="h-4 w-4" />
-              re-analyze
+              Re-analyze
             </button>
             <button
               type="button"
               className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
             >
-              export results
+              Export Results
             </button>
           </div>
         </div>
@@ -29,27 +29,27 @@ export default function AnalysisPage() {
           <div className="rounded-lg border border-gray-200 bg-white p-6">
             <div className="flex items-center gap-2">
               <Sigma className="h-5 w-5 text-blue-600" />
-              <h3 className="text-lg font-medium">content audit</h3>
+              <h3 className="text-lg font-medium">Content Audit</h3>
             </div>
             <div className="mt-4 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm">total content pieces</span>
+                <span className="text-sm">Total Content Pieces</span>
                 <span className="font-medium">12</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">blog posts</span>
+                <span className="text-sm">Blog Posts</span>
                 <span className="font-medium">8</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">video content</span>
+                <span className="text-sm">Video Content</span>
                 <span className="font-medium">2</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">infographics</span>
+                <span className="text-sm">Infographics</span>
                 <span className="font-medium">1</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">podcasts</span>
+                <span className="text-sm">Podcasts</span>
                 <span className="font-medium">1</span>
               </div>
             </div>
@@ -58,12 +58,12 @@ export default function AnalysisPage() {
           <div className="rounded-lg border border-gray-200 bg-white p-6">
             <div className="flex items-center gap-2">
               <PieChart className="h-5 w-5 text-green-600" />
-              <h3 className="text-lg font-medium">audience alignment</h3>
+              <h3 className="text-lg font-medium">Audience Alignment</h3>
             </div>
             <div className="mt-4 space-y-3">
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm">marketing VPs</span>
+                  <span className="text-sm">Marketing VPs</span>
                   <span className="font-medium">45%</span>
                 </div>
                 <div className="h-2 w-full rounded-full bg-gray-100">
@@ -120,7 +120,7 @@ export default function AnalysisPage() {
         {/* Content Gaps Section */}
         <div className="rounded-lg border border-gray-200 bg-white p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">identified content gaps</h2>
+            <h2 className="text-xl font-semibold">Identified Content Gaps</h2>
             <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">5 gaps found</span>
           </div>
           <div className="space-y-4">
@@ -186,56 +186,56 @@ export default function AnalysisPage() {
         {/* Content Refresh Section */}
         <div className="rounded-lg border border-gray-200 bg-white p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">content refresh opportunities</h2>
+            <h2 className="text-xl font-semibold">Content Refresh Opportunities</h2>
             <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">4 pieces need updates</span>
           </div>
           <div className="overflow-hidden rounded-md border border-gray-200">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">content title</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">type</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">published</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">issue</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">potential impact</th>
-                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">action</th>
+                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Content Title</th>
+                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Type</th>
+                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Published</th>
+                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Issue</th>
+                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Potential Impact</th>
+                  <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 <tr className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-sm">content strategy for 2022</td>
-                  <td className="px-4 py-3 text-sm">blog post</td>
+                  <td className="px-4 py-3 text-sm">Content Strategy for 2022</td>
+                  <td className="px-4 py-3 text-sm">Blog Post</td>
                   <td className="px-4 py-3 text-sm">Mar 15, 2022</td>
-                  <td className="px-4 py-3 text-sm">outdated information</td>
+                  <td className="px-4 py-3 text-sm">Outdated Information</td>
                   <td className="px-4 py-3 text-sm">
-                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800">high</span>
+                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800">High</span>
                   </td>
                   <td className="px-4 py-3 text-sm">
-                    <button className="text-blue-600 hover:text-blue-700">view details</button>
+                    <button className="text-blue-600 hover:text-blue-700">View Details</button>
                   </td>
                 </tr>
                 <tr className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-sm">SEO best practices</td>
-                  <td className="px-4 py-3 text-sm">blog post</td>
+                  <td className="px-4 py-3 text-sm">SEO Best Practices</td>
+                  <td className="px-4 py-3 text-sm">Blog Post</td>
                   <td className="px-4 py-3 text-sm">Jun 8, 2022</td>
-                  <td className="px-4 py-3 text-sm">algorithm changes</td>
+                  <td className="px-4 py-3 text-sm">Algorithm Changes</td>
                   <td className="px-4 py-3 text-sm">
-                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800">high</span>
+                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800">High</span>
                   </td>
                   <td className="px-4 py-3 text-sm">
-                    <button className="text-blue-600 hover:text-blue-700">view details</button>
+                    <button className="text-blue-600 hover:text-blue-700">View Details</button>
                   </td>
                 </tr>
                 <tr className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-sm">social media content guide</td>
-                  <td className="px-4 py-3 text-sm">infographic</td>
+                  <td className="px-4 py-3 text-sm">Social Media Content Guide</td>
+                  <td className="px-4 py-3 text-sm">Infographic</td>
                   <td className="px-4 py-3 text-sm">Sep 22, 2022</td>
-                  <td className="px-4 py-3 text-sm">missing platforms</td>
+                  <td className="px-4 py-3 text-sm">Missing Platforms</td>
                   <td className="px-4 py-3 text-sm">
-                    <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs text-yellow-800">medium</span>
+                    <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs text-yellow-800">Medium</span>
                   </td>
                   <td className="px-4 py-3 text-sm">
-                    <button className="text-blue-600 hover:text-blue-700">view details</button>
+                    <button className="text-blue-600 hover:text-blue-700">View Details</button>
                   </td>
                 </tr>
               </tbody>
@@ -246,8 +246,8 @@ export default function AnalysisPage() {
         {/* Keyword Analysis Section */}
         <div className="rounded-lg border border-gray-200 bg-white p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-semibold">keyword analysis</h2>
-            <button className="text-blue-600 hover:text-blue-700">view all keywords</button>
+            <h2 className="text-xl font-semibold">Keyword Analysis</h2>
+            <button className="text-blue-600 hover:text-blue-700">View All Keywords</button>
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div className="rounded-md border border-gray-100 bg-gray-50 p-4">

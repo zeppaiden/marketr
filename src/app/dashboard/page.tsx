@@ -23,25 +23,25 @@ export default function DashboardPage() {
     <React.Suspense>
       <div className="space-y-8">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-gray-900">content strategy dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Content Strategy Dashboard</h1>
           <button
             type="button"
             className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
           >
             <PlusCircle className="h-4 w-4" />
-            new content strategy
+            New Content Strategy
           </button>
         </div>
 
         {/* Content Ingestion Section */}
         <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="mb-4 text-xl font-semibold">content ingestion</h2>
+          <h2 className="mb-4 text-xl font-semibold">Content Ingestion</h2>
           
           {isAnalyzing ? (
             <div className="flex flex-col items-center justify-center space-y-4 p-8">
               <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600"></div>
-              <p className="text-center font-medium text-gray-700">analyzing your content...</p>
-              <p className="text-center text-sm text-gray-500">this may take a few minutes</p>
+              <p className="text-center font-medium text-gray-700">Analyzing your content...</p>
+              <p className="text-center text-sm text-gray-500">This may take a few minutes</p>
             </div>
           ) : analysisComplete ? (
             <div className="space-y-4">
@@ -75,7 +75,7 @@ export default function DashboardPage() {
                 onClick={() => setAnalysisComplete(false)}
                 className="text-sm text-blue-600 hover:text-blue-700"
               >
-                Analyze more content
+                Analyze More Content
               </button>
             </div>
           ) : (
@@ -85,47 +85,47 @@ export default function DashboardPage() {
         
         {/* Analysis Overview Section */}
         <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="mb-4 text-xl font-semibold">analysis overview</h2>
+          <h2 className="mb-4 text-xl font-semibold">Analysis Overview</h2>
           <div className="grid grid-cols-3 gap-6">
             <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
               <div className="flex items-center gap-2">
                 <GanttChart className="h-5 w-5 text-blue-600" />
-                <h3 className="text-sm font-medium">content gaps</h3>
+                <h3 className="text-sm font-medium">Content Gaps</h3>
               </div>
               <p className="mt-2 text-2xl font-bold">5</p>
-              <p className="mt-1 text-xs text-gray-500">key topic areas with insufficient coverage</p>
+              <p className="mt-1 text-xs text-gray-500">Key topic areas with insufficient coverage</p>
             </div>
             
             <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
               <div className="flex items-center gap-2">
                 <BarChart3 className="h-5 w-5 text-green-600" />
-                <h3 className="text-sm font-medium">content performance</h3>
+                <h3 className="text-sm font-medium">Content Performance</h3>
               </div>
               <p className="mt-2 text-2xl font-bold">+23%</p>
-              <p className="mt-1 text-xs text-gray-500">projected traffic increase with new strategy</p>
+              <p className="mt-1 text-xs text-gray-500">Projected traffic increase with new strategy</p>
             </div>
             
             <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
               <div className="flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-purple-600" />
-                <h3 className="text-sm font-medium">strategy timeline</h3>
+                <h3 className="text-sm font-medium">Strategy Timeline</h3>
               </div>
               <p className="mt-2 text-2xl font-bold">3 months</p>
-              <p className="mt-1 text-xs text-gray-500">optimized content calendar duration</p>
+              <p className="mt-1 text-xs text-gray-500">Optimized content calendar duration</p>
             </div>
           </div>
         </div>
         
         {/* Recent Activity Section */}
         <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="mb-4 text-xl font-semibold">recent activity</h2>
+          <h2 className="mb-4 text-xl font-semibold">Recent Activity</h2>
           <div className="space-y-3">
             <div className="flex items-center gap-3 border-l-2 border-blue-500 pl-3">
               <div className="rounded-full bg-blue-100 p-2">
                 <Upload className="h-4 w-4 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm font-medium">content analysis completed</p>
+                <p className="text-sm font-medium">Content analysis completed</p>
                 <p className="text-xs text-gray-500">3 URLs analyzed • 12 content pieces extracted</p>
               </div>
               <div className="ml-auto text-xs text-gray-400">2 hours ago</div>
@@ -136,7 +136,7 @@ export default function DashboardPage() {
                 <GanttChart className="h-4 w-4 text-green-600" />
               </div>
               <div>
-                <p className="text-sm font-medium">strategy generated</p>
+                <p className="text-sm font-medium">Strategy generated</p>
                 <p className="text-xs text-gray-500">6-month content plan with 24 recommendations</p>
               </div>
               <div className="ml-auto text-xs text-gray-400">2 hours ago</div>
@@ -147,8 +147,8 @@ export default function DashboardPage() {
                 <Calendar className="h-4 w-4 text-yellow-600" />
               </div>
               <div>
-                <p className="text-sm font-medium">calendar updated</p>
-                <p className="text-xs text-gray-500">added 8 new content pieces to your calendar</p>
+                <p className="text-sm font-medium">Calendar updated</p>
+                <p className="text-xs text-gray-500">Added 8 new content pieces to your calendar</p>
               </div>
               <div className="ml-auto text-xs text-gray-400">1 hour ago</div>
             </div>

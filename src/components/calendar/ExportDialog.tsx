@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Download, X, Calendar, FileText, Copy, Check } from "lucide-react";
+import { Download, Calendar, FileText, Copy } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -137,6 +137,7 @@ export function ExportDialog({ isOpen, onClose }: ExportDialogProps) {
           
           <div className="space-y-2">
             <Label>Content to include</Label>
+            <Separator className="my-2" />
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Checkbox id="all-content" defaultChecked />
@@ -168,7 +169,7 @@ export function ExportDialog({ isOpen, onClose }: ExportDialogProps) {
             ) : (
               <>
                 <Download className="mr-2 h-4 w-4" />
-                <span>Export calendar</span>
+                <span>Export Calendar</span>
               </>
             )}
           </Button>
