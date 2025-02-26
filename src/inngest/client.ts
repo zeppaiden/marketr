@@ -7,11 +7,6 @@ const events = {
       url: z.string()
     })
   },
-  "test/hello.world": {
-    data: z.object({
-      name: z.string()
-    })
-  }
 }
 
 export const inngest = new Inngest({
